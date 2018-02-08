@@ -1,0 +1,382 @@
+
+global $conn,$busName , $town , $prod_image;
+    global $busNameErr, $profPicErr, $categErr, $sloganErr, $descErr, $emailErr, $townErr, $addressErr, $phoneNoErr;
+    
+    if(isset($_POST['submit']) && $_POST['submit'] == "Update Business")
+    {
+        if ($_POST['busName'] == "") {
+            $busNameErr = "Business name is required";
+        } else {
+            $busNameErr = "";
+            $busName = test_input($_POST['busName']);
+        }
+
+        if ($_POST['town'] == "Select town") {
+            $townErr = "Select a town";
+        } else {
+            $townErr = "";
+            $town = test_input($_POST['town']);
+        }
+
+        if ($_POST['category'] == "Select category") {
+            $categErr = "Select a Category";
+        } else {
+            $categErr = "";
+            $categ = test_input($_POST['category']);
+        }
+
+        if (empty($_POST['phoneNo'])) {
+            $phoneNoErr = "Phone number is required";
+        } else {
+            $phoneNoErr = "";
+            $phoneNo = test_input($_POST['phoneNo']);
+        }
+
+        if (empty($_POST['email'])) {
+            $emailErr = "Email is required";
+        } else {
+            $emailErr = "";
+            $email = test_input($_POST['email']);
+        }
+        if (empty($_POST['web'])) {
+            $emailErr = "web is required";
+        } else {
+            $emailErr = "";
+            $web = test_input($_POST['web']);
+        }
+
+        if (empty($_POST['slogan'])) {
+            $sloganErr = "Slogan is required";
+        } else {
+            $sloganErr = "";
+            $slogan = test_input($_POST['slogan']);
+        }
+
+        if (empty($_FILES['picha']['name'])) {
+            $profPicErr = "Profile Picture is required";
+        } else {
+            $profPicErr = "";
+            $prod_image = $_FILES['picha']['name'];
+        }
+
+        if (empty($_POST['address'])) {
+            $addressErr = "Address is required";
+        } else {
+            $addressErr = "";
+            $address = test_input($_POST['address']);
+        }
+
+        if (empty($_POST['desc'])) {
+            $descErr = "Description is required";
+        } else {
+            $descErr = "";
+            $desc = test_input($_POST['desc']);
+        }
+
+        $userId = $_SESSION['loginId'];
+
+        if (!empty($busName && $slogan && $categ && $desc && $address && $phoneNo && $userId && $prod_image && $town && $web)) 
+        {
+
+                $businessEditId = $_GET['r'];
+                $businessUpdateName = $busName;
+            
+                $get = "SELECT * FROM businesses WHERE businessName ='$businessUpdateName'";
+                $run = mysqli_query($conn, $get) or die(mysqli_error($conn));
+
+                $num = mysqli_num_rows($run);
+                if ($num != 0) {
+                    $busErr = "The business name already exists.";
+                } else {
+                    $busErr = "";
+
+                    $prod_image = $_FILES['picha']['name'];
+                    $prod_image_tmp = $_FILES['picha']['tmp_name'];
+
+                    move_uploaded_file($prod_image_tmp, '/opt/lampp/htdocs/webmarketer/images/uploads/' . $prod_image);
+
+                        $time = date("Y-m-d H:i:s");
+                        $busNameErr = "";
+ echo   $reg = "UPDATE SET businessName = '$busName', slogan = '$slogan', addedOn = '$time', category = '$categ', description = '$desc', address = '$address',"
+                        . " phoneNo = '$phoneNo', profilePic = '$prod_image', locatedAt = '$town', website = '$web')";
+                      // $run = mysqli_query($conn, $reg) or die("Could not be added" . mysqli_error($conn));
+
+                        if ($run) {
+                            //echo "<script>alert('Registration successful')</script>";
+                            //echo "<script>window.open(".htmlspecialchars($_SERVER['PHP_SELF'])."?q=business","'_self')</script>";
+                            $redirect = htmlspecialchars($_SERVER['PHP_SELF']) . "?q=business";
+                            header("Location:" . $redirect);
+                        }
+                    
+                    echo $upd_bus = "UPDATE businesses SET townName = '$townUpdateName' WHERE townId=".$townEditId;
+                    //$res_upd = mysqli_query($conn,$upd_bus) or die(mysqli_error($conn));
+
+                    if($res_upd)
+                    {
+                         //echo "<script>alert('Update successful')</script>";
+                         echo "<script>window.open('".htmlspecialchars($_SERVER['PHP_SELF'])."?q=town','_self')</script>";
+                    }
+                }  
+        }
+      echo "Yeeeeees" ;
+    }
+
+    else
+    {
+
+     global $busNameErr, $conn, $addressErr, $phoneNoErr, $emailErr, $townErr, $webErr, $descErr, $sloganErr, $categErr, $profPicErr;
+    
+    if(isset($_GET['e']) && $_GET['e'] == "editbusiness")
+    {
+        if(isset($_POST['submit']) && $_POST['submit'] == "Update Business")
+        {
+            if ($_POST['busName'] == "") {
+                $busNameErr = "Business name is required";
+            } else {
+                $busNameErr = "";
+                $busName = test_input($_POST['busName']);
+            }
+
+            if ($_POST['town'] == "Select town") {
+                $townErr = "Select a town";
+            } else {
+                $townErr = "";
+                $town = test_input($_POST['town']);
+            }
+
+            if ($_POST['category'] == "Select category") {
+                $categErr = "Select a Category";
+            } else {
+                $categErr = "";
+                $categ = test_input($_POST['category']);
+            }
+
+            if (empty($_POST['phoneNo'])) {
+                $phoneNoErr = "Phone number is required";
+            } else {
+            $phoneNoErr = "";
+            $phoneNo = test_input($_POST['phoneNo']);
+            }
+
+            if (empty($_POST['email'])) {
+                $emailErr = "Email is required";
+            } else {
+                $emailErr = "";
+                $email = test_input($_POST['email']);
+            }
+            if (empty($_POST['web'])) {
+                $emailErr = "web is required";
+            } else {
+                $emailErr = "";
+                $web = test_input($_POST['web']);
+            }
+
+            if (empty($_POST['slogan'])) {
+                $sloganErr = "Slogan is required";
+            } else {
+                $sloganErr = "";
+                $slogan = test_input($_POST['slogan']);
+            }
+
+            if (empty($_FILES['picha']['name'])) {
+                $profPicErr = "Profile Picture is required";
+            } else {
+                $profPicErr = "";
+                $prod_image = $_FILES['picha']['name'];
+            }
+
+            if (empty($_POST['address'])) {
+                $addressErr = "Address is required";
+            } else {
+                $addressErr = "";
+                $address = test_input($_POST['address']);
+            }
+
+            if (empty($_POST['desc'])) {
+                $descErr = "Description is required";
+            } else {
+            $descErr = "";
+            $desc = test_input($_POST['desc']);
+            }
+
+            $userId = $_SESSION['loginId'];
+
+            if (!empty($busName && $slogan && $categ && $desc && $address && $phoneNo && $userId && $prod_image && $town && $web)) 
+            {
+
+                    $businessEditId = $_GET['r'];
+                    $businessUpdateName = $busName;
+                
+                    $get = "SELECT * FROM businesses WHERE businessName ='$businessUpdateName'";
+                    $run = mysqli_query($conn, $get) or die(mysqli_error($conn));
+
+                    $num = mysqli_num_rows($run);
+                    if ($num != 0) 
+                    {
+                        $busErr = "The business name already exists.";
+                    } 
+                    else 
+                    {
+                        $busErr = "";
+
+                        $prod_image = $_FILES['picha']['name'];
+                        $prod_image_tmp = $_FILES['picha']['tmp_name'];
+
+                        move_uploaded_file($prod_image_tmp, '/opt/lampp/htdocs/webmarketer/images/uploads/' . $prod_image);
+
+                            $time = date("Y-m-d H:i:s");
+                            $busNameErr = "";
+                        echo   $reg = "UPDATE SET businessName = '$busName', slogan = '$slogan', addedOn = '$time', category = '$categ', description = '$desc', address = '$address',"
+                            . " phoneNo = '$phoneNo', profilePic = '$prod_image', locatedAt = '$town', website = '$web')";
+                          // $run = mysqli_query($conn, $reg) or die("Could not be added" . mysqli_error($conn));
+
+                            if ($run) {
+                                //echo "<script>alert('Registration successful')</script>";
+                                //echo "<script>window.open(".htmlspecialchars($_SERVER['PHP_SELF'])."?q=business","'_self')</script>";
+                                $redirect = htmlspecialchars($_SERVER['PHP_SELF']) . "?q=business";
+                                header("Location:" . $redirect);
+                            }
+                        
+                        echo $upd_bus = "UPDATE businesses SET townName = '$townUpdateName' WHERE townId=".$townEditId;
+                        //$res_upd = mysqli_query($conn,$upd_bus) or die(mysqli_error($conn));
+
+                        if($res_upd)
+                        {
+                             //echo "<script>alert('Update successful')</script>";
+                             echo "<script>window.open('".htmlspecialchars($_SERVER['PHP_SELF'])."?q=town','_self')</script>";
+                        }
+                    }  
+            }
+        else
+        {
+            $businId = $_GET['r'];
+            $check_bus = "SELECT * FROM businesses WHERE businessId='$businId'";
+            $res_bus = mysqli_query($conn, $check_bus) or die(mysqli_error($conn));
+            
+            $num_row = mysqli_fetch_array($res_bus);
+            $bus_id = $num_row['businessId'];
+            $busName = $num_row['businessName'];
+            $busSlogan = $num_row['slogan'];
+            $busDesc = $num_row['description'];
+            $busAddr = $num_row['address'];
+            $busCat = $num_row['category'];
+            $busLocat = $num_row['locatedAt'];
+            $busPhon = $num_row['phoneNo'];
+            $busPic = $num_row['profilePic'];
+            $busWeb = $num_row['website'];
+            
+            $check_town = "SELECT * FROM towns WHERE townId='$busLocat'";
+            $res_town = mysqli_query($conn, $check_town) or die(mysqli_error($conn));
+            
+            $town_row = mysqli_fetch_array($res_town);
+            $town_id = $town_row['townId'];
+            $town_name = $town_row['townName'];
+            
+            $check_cat = "SELECT * FROM categories WHERE categoryId =".$busCat;
+            $res_cat = mysqli_query($conn, $check_cat) or die(mysqli_error($conn));
+
+            $row_cat = mysqli_fetch_array($res_cat);
+            $catId = $row_cat['categoryId'];
+            $catName = $row_cat['categoryName'];
+
+        }
+    }
+
+
+
+
+ <div class="tabl">
+        <ul>
+            <li class="list-link"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?q=user&r=business">View Business</a></li>
+        </ul>
+        <div class="bus-upd business-add">
+            <form role="form"  method="post" enctype="multipart/form-data">
+            <h2 class="text-center text">&nbsp;&nbsp;<u><strong>Business Registration</strong></u></h2>
+             <div class="col-md-5">
+                <div class="form-group">
+                    <label class="label-control">Business Name:</label>
+                    <span class="span-error"> * <?php echo $busNameErr; ?></span>
+                    <input type="text" name="busName" value="<?php echo $busName; ?>" class="form-control" placeholder="Business Name">
+                </div>
+                <div class="form-group">
+                    <label class="label-control">Address:</label>
+                    <span class="span-error"> * <?php echo $addressErr; ?></span>
+                    <input type="text" name="address" value="<?php echo $busAddr; ?>" class="form-control" placeholder="Address">
+                </div>
+                <div class="form-group">
+                    <label class="label-control">Phone Number:</label>
+                    <span class="span-error"> * <?php echo $phoneNoErr; ?></span>
+                    <input type="text" name="phoneNo" value="<?php echo $busPhon; ?>" class="form-control" placeholder="Phone Number">
+                </div>
+                <div class="form-group">
+                    <label class="label-control">Website:</label>
+                    <span class="span-error"> * <?php echo $webErr; ?></span>
+                    <input type="text" name="web" value="<?php echo $busWeb; ?>" class="form-control" placeholder="Enter Website URL">
+                </div>
+                <div class="form-group">
+                    <label class="label-control">Town:</label>
+                    <span class="span-error"> * <?php echo $townErr; ?></span><br>
+                    <select class="col-md-7" name="town">
+                        <option value="<?php echo $busLocat;?>"><?php echo $town_name; ?></option>
+                        <?php
+                        $check_town = "SELECT * FROM towns";
+                        $res_town = mysqli_query($conn, $check_town) or die(mysqli_error($conn));
+
+                        while ($row_town = mysqli_fetch_array($res_town)) {
+                            $townId = $row_town['townId'];
+                            $townName = $row_town['townName'];
+                            ?>
+                            <option value="<?php echo $townId; ?>"><?php echo $townName ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                
+                <div class="form-group">
+                    <label class="label-control">Description:</label>
+                    <span class="span-error"> * <?php echo $descErr; ?></span><br>
+                    <input type="text" class="text-control" value="<?php echo $busDesc; ?>"  name="desc" placeholder="Enter your desciption of the business">              </div>
+                <div class="form-group">
+                    <label class="label-control">Slogan:</label>
+                    <span class="span-error"> * <?php echo $sloganErr; ?></span><br>
+                    <input type="text" value="<?php echo $busSlogan; ?>" class="text-control " name="slogan" placeholder="Slogan">
+                </div>
+                <div class="form-group">
+                    <label class="label-control">Category:</label>
+                    <span class="span-error"> * <?php echo $categErr; ?></span><br>
+                    <select  name="category">
+                        <option value="<?php echo $busCat; ?>"><?php echo $catName; ?></option>
+                        <?php
+                        $check_cat = "SELECT * FROM categories";
+                        $res_cat = mysqli_query($conn, $check_cat) or die(mysqli_error($conn));
+
+                        while ($row_cat = mysqli_fetch_array($res_cat)) {
+                            $catId = $row_cat['categoryId'];
+                            $catName = $row_cat['categoryName'];
+                            ?>
+                            <option value="<?php echo $catId; ?>"><?php echo $catName ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="label-control">Profile Pic:</label>
+                    <span class="span-error"> * <?php echo $profPicErr; ?></span><br>
+                    <img src="images/uploads/<?php echo $busPic; ?>" width="70px" class="img-rounded" height="50px" alt="Business Image">
+                    <input type="file"  name="picha">
+                </div>
+            </div>
+         
+                <div class="form-group">
+                    <label class="label-control"></label>
+                    <div cldass="col-md-6">
+                        <input type="submit" name="submit" class="btn bus-upd text-center btn-primary btn-lg" value="Update Business">
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div> 
